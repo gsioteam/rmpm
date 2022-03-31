@@ -83,13 +83,18 @@ async function main() {
     if (pk_author) {
         stdout.write(`* @author ${pk_author}\n`);
     }
-    for (let param of pk_params) {
-        writeParam(param);
+    if (pk_params) {
+        for (let param of pk_params) {
+            writeParam(param);
+        }
     }
     stdout.write(" */\n");
 
     let br = browserify();
     br.require(path.join(dir, js_main), { entry: true });
+    if (argv.external) {
+        br.external(argv.external);
+    }
     
     let result = await streamToString(br.bundle());
     if (argv.c) {
