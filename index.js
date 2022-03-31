@@ -16,8 +16,8 @@ main();
  * @param {String} param.description
  * @param {*} param.default
  * @param {String} param.type
- * @param {String?} param.on
- * @param {String?} param.off
+ * @param {Object} param.switch
+ * @param {Object} param.options
  * @param {Array} param.children
  */
 function writeParam(param, parent) {
@@ -28,10 +28,18 @@ function writeParam(param, parent) {
         stdout.write(` * @default ${param.default}\n`);
     if (param.type !== undefined)
         stdout.write(` * @type ${param.type}\n`);
-    if (param.on !== undefined)
-        stdout.write(` * @type ${param.on}\n`);
-    if (param.off !== undefined)
-        stdout.write(` * @type ${param.off}\n`);
+    if (param.switch) {
+        if (param.switch.on !== undefined)
+            stdout.write(` * @type ${param.switch.on}\n`);
+        if (param.switch.off !== undefined)
+            stdout.write(` * @type ${param.switch.off}\n`);
+    }
+    if  (param.options) {
+        for (let key in param.options) {
+            let value = param.options[key];
+            stdout.write(` * @option ${value}\n * @value ${key}\n`);
+        }
+    }
     if (parent)
         stdout.write(` * @parent ${parent.name}\n`);
     
