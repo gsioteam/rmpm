@@ -1,14 +1,14 @@
 {
   "name": "rmpm",
   "version": "1.0.0",
-  "description": "",
+  "description": "RPG Maker JS plugin tool.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": "index.js",
-  "author": "",
-  "license": "ISC",
+  "author": "gsioteam",
+  "license": "MIT",
   "dependencies": {
     "browserify": "^17.0.0",
     "minimist": "^1.2.6",
