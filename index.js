@@ -78,10 +78,10 @@ async function main() {
     );
 
     stdout.write("/*:\n");
-    stdout.write(`* @target ${target}\n`);
-    stdout.write(`* @plugindesc (v${pk_version}) ${pk_des}\n`);
+    stdout.write(` * @target ${target}\n`);
+    stdout.write(` * @plugindesc (v${pk_version}) ${pk_des}\n`);
     if (pk_author) {
-        stdout.write(`* @author ${pk_author}\n`);
+        stdout.write(` * @author ${pk_author}\n`);
     }
     if (pk_params) {
         for (let param of pk_params) {
@@ -94,6 +94,9 @@ async function main() {
     br.require(path.join(dir, js_main), { entry: true });
     if (argv.external) {
         br.external(argv.external);
+    }
+    if (argv.ignore) {
+        br.ignore(argv.ignore);
     }
     
     let result = await streamToString(br.bundle());
