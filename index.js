@@ -13,6 +13,7 @@ main();
  * 
  * @param {Object} param
  * @param {String} param.name
+ * @param {String} param.text
  * @param {String} param.description
  * @param {*} param.default
  * @param {String} param.type
@@ -21,13 +22,10 @@ main();
  * @param {Array} param.children
  */
 function writeParam(param, parent) {
-    stdout.write(' *\n');
-    stdout.write(` * @param ${param.name}\n`);
-    stdout.write(` * @desc ${param.description}\n`);
-    if (param.default !== undefined)
-        stdout.write(` * @default ${param.default}\n`);
-    if (param.type !== undefined)
-        stdout.write(` * @type ${param.type}\n`);
+    _writeParams(param, ['name', 'text', 'description', 'default', 'type'], {
+        name: 'param',
+        description: 'desc',
+    });
     if (param.switch) {
         if (param.switch.on !== undefined)
             stdout.write(` * @type ${param.switch.on}\n`);
@@ -46,6 +44,46 @@ function writeParam(param, parent) {
     if (param.children) {
         for (let child of param.children) {
             writeParam(child, param);
+        }
+    }
+}
+
+/**
+ * 
+ * @param {Object} command 
+ * @param {String} command.name
+ * @param {String} command.text
+ * @param {String} command.description
+ * @param {Array} command.args
+ */
+function writeCommand(command) {
+    _writeParams(command, ['name', 'text', 'description'], {
+        name: 'command',
+        description: 'desc'
+    });
+
+    for (let arg of command.args) {
+        _writeParams(arg, ['name', 'text', 'type', 'description', 'default'], {
+            name: 'arg',
+            description: 'desc'
+        });
+    }
+}
+
+/**
+ * 
+ * @param {Object} params 
+ * @param {Array<String>} keys 
+ */
+function _writeParams(params, keys, keyMap = {}) {
+    stdout.write(' *\n');
+
+    for (let key of keys) {
+        let keyWord = keyMap[key] ? keyMap[key] : key;
+        let value = keys[key];
+
+        if (value !== undefined) {
+            stdout.write(` * @${keyWord} ${value}\n`);
         }
     }
 }
@@ -70,6 +108,7 @@ async function main() {
     let pk_author = config.author;
     let js_main = argv.main || config.main;
     let pk_params = config.params;
+    let pk_commands = config.commands;
 
     let output = await fs.createWriteStream(path.join(dir, pk_name + '.js'));
     stdout.write = output.write.bind(output);
@@ -89,6 +128,11 @@ async function main() {
     if (pk_params) {
         for (let param of pk_params) {
             writeParam(param);
+        }
+    }
+    if (pk_commands) {
+        for (let command of pk_commands) {
+            writeCommand(command);
         }
     }
     stdout.write(" */\n");
