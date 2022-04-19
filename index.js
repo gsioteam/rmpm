@@ -80,7 +80,7 @@ function _writeParams(params, keys, keyMap = {}) {
 
     for (let key of keys) {
         let keyWord = keyMap[key] ? keyMap[key] : key;
-        let value = keys[key];
+        let value = params[key];
 
         if (value !== undefined) {
             stdout.write(` * @${keyWord} ${value}\n`);
