@@ -144,11 +144,13 @@ async function main() {
     let br = browserify({
         debug: true,
     });
-    br.transform(babelify, {
-        global: true,
-        presets: ["@babel/preset-env"],
-        plugins: ["@babel/plugin-proposal-class-properties"],
-    });
+    if (argv.b) {
+        br.transform(babelify, {
+            global: true,
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties", "@babel/plugin-transform-runtime"],
+        });
+    }
     br.require(path.join(dir, js_main), { entry: true });
     if (argv.external) {
         br.external(argv.external);
