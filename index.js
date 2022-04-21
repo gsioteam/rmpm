@@ -5,9 +5,13 @@ const fs = require('sacred-fs');
 const argv = require('minimist')(process.argv.slice(2));
 const path = require('path');
 const UglifyJS = require('uglify-es');
-const { stdout } = require('process');
+const babelify = require('babelify');
+const { stdout, stderr } = require('process');
 
-main();
+main().catch((e)=>{
+    stderr.write(e.toString() + '\n');
+    throw e;
+});
 
 /**
  * 
@@ -137,7 +141,14 @@ async function main() {
     }
     stdout.write(" */\n");
 
-    let br = browserify();
+    let br = browserify({
+        debug: true,
+    });
+    br.transform(babelify, {
+        global: true,
+        presets: ["@babel/preset-env"],
+        plugins: ["@babel/plugin-proposal-class-properties"],
+    });
     br.require(path.join(dir, js_main), { entry: true });
     if (argv.external) {
         br.external(argv.external);
