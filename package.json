@@ -4,7 +4,6 @@
   "description": "RPG Maker JS plugin tool.",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js '/Users/gen/Programs/G_Battle'"
   },
   "bin": "index.js",
   "author": "gsioteam",
