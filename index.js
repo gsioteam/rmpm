@@ -66,11 +66,13 @@ function writeCommand(command) {
         description: 'desc'
     });
 
-    for (let arg of command.args) {
-        _writeParams(arg, ['name', 'text', 'type', 'description', 'default'], {
-            name: 'arg',
-            description: 'desc'
-        });
+    if (command.args) {
+        for (let arg of command.args) {
+            _writeParams(arg, ['name', 'text', 'type', 'description', 'default'], {
+                name: 'arg',
+                description: 'desc'
+            });
+        }
     }
 }
 
