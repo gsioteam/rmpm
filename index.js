@@ -142,7 +142,6 @@ async function main() {
     stdout.write(" */\n");
 
     let br = browserify({
-        debug: true,
     });
     if (argv.b) {
         br.transform(babelify, {
